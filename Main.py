@@ -11,6 +11,7 @@ import random
 from keras.layers import Flatten
 from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import  MaxPooling2D
+from keras.layers import Dropout
 import requests
 from PIL import Image
 import cv2
@@ -70,6 +71,7 @@ def leNet_Model():
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Flatten())
     model.add(Dense(500, activation = 'relu'))
+    model.add(Dropout(0.5))
     model.add(Dense(num_classes ,activation = 'softmax'))
     model.compile(Adam(lr=0.01), loss = 'categorical_crossentropy', metrics = ['accuracy'])
     return model
@@ -89,3 +91,9 @@ image = cv2.bitwise_not(gray_scale)
 plt.imshow(image,cmap = plt.get_cmap("gray"))
 print(image.shape)
 plt.show()
+
+image = image/255
+image = image.reshape(1,28,28,1)
+
+prediction = model.predict_classes(image)
+print("prediction: ", str(prediction))
