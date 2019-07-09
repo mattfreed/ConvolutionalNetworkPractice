@@ -97,3 +97,29 @@ image = image.reshape(1,28,28,1)
 
 prediction = model.predict_classes(image)
 print("prediction: ", str(prediction))
+
+score = model.evaluate(X_test, y_test, verbose = 0)
+print('Test Score:',score[0])
+print('Test acc:',score[1])
+
+layer1 = Model(inputs=model.layers[0].input, outputs = model.layers[0].output)
+layer2 = Model(inputs=model.layers[0].input, outputs = model.layers[2].output)
+
+visual_layer1, visual_layer2 =layer1.predict(image), layer2.predict(image)
+print(visual_layer1.shape)
+print(visual_layer2.shape)
+
+plt.figure(figsize=(10,6))
+for i in range(30):
+    plt.subplot(6,5, i+1)
+    plt.imshow(visual_layer1[0, :, :, i], cmap=plt.get_cmap('jet'))
+
+
+plt.show()
+
+plt.figure(figsize=(10,6))
+for i in range(15):
+    plt.subplot(3,5, i+1)
+    plt.imshow(visual_layer2[0, :, :, i], cmap=plt.get_cmap('jet'))
+
+plt.show()
